@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import * as React from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const baseURL = "https://opendata.resas-portal.go.jp/api/v1/prefectures";
+
+interface ResasResponse {
+  statusCode: string;
+  description: string;
+  message: string | null;
+  result: {
+    prefCode: number;
+    prefName: string;
+  }[];
 }
+
+const App: React.FC = () => {
+  const [post, setPost] = React.useState<ResasResponse>(null!);
+  const [error, setError] = React.useState(null);
+  React.useEffect(() => {
+    if (process.env.REACT_APP_RESAS_API_KEY) {
+      axios
+        .get(baseURL, {
+          headers: { "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY },
+        })
+        .then((result) => {
+          setPost(result.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+  }, []);
+  console.log(post);
+
+  if (error) return <div>Error: {error}</div>;
+
+  return <div className="App"></div>;
+};
 
 export default App;
