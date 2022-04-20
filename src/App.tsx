@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as React from "react";
 import "./App.css";
+import Header from "./components/Header";
 
 const baseURL = "https://opendata.resas-portal.go.jp/api/v1/prefectures";
 
@@ -31,11 +32,18 @@ const App: React.FC = () => {
         });
     }
   }, []);
-  console.log(post);
+
+  if (post) {
+    const mapAry = post.result.map((item) => item.prefName);
+    console.log(mapAry);
+  }
 
   if (error) return <div>Error: {error}</div>;
-
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <Header title="Title" />
+    </div>
+  );
 };
 
 export default App;
