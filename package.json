@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .jsx,.js,.tsx,.ts src/"
+    "lint": "eslint --ext .jsx,.js,.tsx,.ts src/",
+    "fmt": "prettier --write src/**/*"
   },
   "browserslist": {
     "production": [
@@ -44,6 +45,8 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "eslint": "^8.13.0",
-    "eslint-plugin-react": "^7.29.4"
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.29.4",
+    "prettier": "^2.6.2"
   }
 }
