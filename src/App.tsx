@@ -1,49 +1,52 @@
-import axios from "axios";
-import * as React from "react";
-import "./App.css";
-import Header from "./components/Header";
+import axios, { AxiosResponse, AxiosError } from 'axios'
+import * as React from 'react'
+import './App.css'
+import { Header } from './components/Header'
+import { Form } from './components/Form'
 
-const baseURL = "https://opendata.resas-portal.go.jp/api/v1/prefectures";
+const baseURL = 'https://opendata.resas-portal.go.jp/api/v1/prefectures'
 
 interface ResasResponse {
-  statusCode: string;
-  description: string;
-  message: string | null;
+  statusCode: string
+  description: string
+  message: string | null
   result: {
-    prefCode: number;
-    prefName: string;
-  }[];
+    prefCode: number
+    prefName: string
+  }[]
 }
 
 const App: React.FC = () => {
-  const [post, setPost] = React.useState<ResasResponse>(null!);
-  const [error, setError] = React.useState(null);
+  const [post, setPost] = React.useState<ResasResponse>(null!)
+  const [error, setError] = React.useState<AxiosError>(null!)
   React.useEffect(() => {
     if (process.env.REACT_APP_RESAS_API_KEY) {
       axios
         .get(baseURL, {
-          headers: { "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY },
+          headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
         })
-        .then((result) => {
-          setPost(result.data);
+        .then((result: AxiosResponse<ResasResponse>) => {
+          setPost(result.data)
         })
-        .catch((error) => {
-          setError(error);
-        });
+        .catch((error: AxiosError<{ error: string }>) => {
+          setError(error)
+        })
     }
-  }, []);
+  }, [])
 
   if (post) {
-    const mapAry = post.result.map((item) => item.prefName);
-    console.log(mapAry);
+    return (
+      <div className="App">
+        <Header title="Title" />
+        <h2>都道府県</h2>
+        <Form prefectures={post.result} />
+      </div>
+    )
   }
 
-  if (error) return <div>Error: {error}</div>;
-  return (
-    <div className="App">
-      <Header title="Title" />
-    </div>
-  );
-};
+  if (error) return <>Error: {error}</>
 
-export default App;
+  return <div>Loading...</div>
+}
+
+export default App

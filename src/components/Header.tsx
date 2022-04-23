@@ -1,11 +1,9 @@
-import * as React from "react";
+import * as React from 'react'
 
 type Props = {
-  title: string;
-};
+  title: string
+}
 
-const Component: React.FC<Props> = (props) => {
-  return <h1>{props.title}</h1>;
-};
-
-export default Component;
+export const Header: React.FC<Props> = (props) => {
+  return <h1>{props.title}</h1>
+}
