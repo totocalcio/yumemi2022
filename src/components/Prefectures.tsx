@@ -5,6 +5,7 @@ type Props = {
   prefectures: {
     prefCode: number
     prefName: string
+    checked?: boolean
   }[]
 }
 
@@ -15,13 +16,17 @@ const List = styled.ul`
 `
 
 export const Prefectures: React.FC<Props> = (props) => {
-  const [checkedState, setCheckedState] = React.useState<boolean[]>(
-    Array(props.prefectures.length).fill(false)
-  )
+  const [checkedState, setCheckedState] = React.useState(props.prefectures)
 
   const handleCheckedState = (position: number) => {
+    const updateItem = (index: number) => {
+      checkedState[index].checked = !checkedState[index].checked
+      return checkedState[index]
+    }
     setCheckedState(
-      checkedState.map((item, index) => (index === position ? !item : item))
+      checkedState.map((item, index) =>
+        index === position ? updateItem(index) : item
+      )
     )
   }
 
@@ -32,7 +37,7 @@ export const Prefectures: React.FC<Props> = (props) => {
         id={item.prefName}
         name="name"
         value={item.prefCode}
-        checked={checkedState[index]}
+        checked={checkedState[index].checked}
         onChange={() => handleCheckedState(index)}
       />
       <label htmlFor={item.prefName}>{item.prefName}</label>
