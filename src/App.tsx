@@ -2,11 +2,11 @@ import axios, { AxiosResponse, AxiosError } from 'axios'
 import * as React from 'react'
 import './App.css'
 import { Header } from './components/Header'
-import { Form } from './components/Form'
+import { Prefectures } from './components/Prefectures'
 
 const baseURL = 'https://opendata.resas-portal.go.jp/api/v1/prefectures'
 
-interface ResasResponse {
+type ResasResponse = {
   statusCode: string
   description: string
   message: string | null
@@ -39,7 +39,7 @@ const App: React.FC = () => {
       <div className="App">
         <Header title="Title" />
         <h2>都道府県</h2>
-        <Form prefectures={post.result} />
+        <Prefectures prefectures={post.result} />
       </div>
     )
   }

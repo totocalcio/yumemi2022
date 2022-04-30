@@ -10,10 +10,6 @@ type Props = {
 }
 
 export const Form: React.FC<Props> = (props) => {
-  const handleSubmit = (event: React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-  }
-
   const distPrefectures = props.prefectures.map((item) => {
     item['checked'] = false
     return item
@@ -22,9 +18,6 @@ export const Form: React.FC<Props> = (props) => {
   return (
     <form method="post">
       <Prefectures prefectures={distPrefectures} />
-      <button type="button" onClick={handleSubmit}>
-        送信
-      </button>
     </form>
   )
 }

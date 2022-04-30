@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-interface ResasResponse<T> {
+type ResasResponse<T> = {
   statusCode: string
   description: string
   message: string | null
@@ -76,16 +76,17 @@ export const Prefectures: React.FC<Props> = (props) => {
   }
 
   React.useEffect(() => {
-    if (post) {
-      if (checkedState[position].checked === true) {
-        setSeries([...series, dataset2(checkedState[position].prefName)])
-      } else {
-        setSeries(
-          series.filter((item) => item.name !== checkedState[position].prefName)
-        )
-      }
+    console.log(1, post)
+    if (checkedState[position].checked === true) {
+      setSeries((s) => [...series, dataset(checkedState[position].prefName)])
+    } else {
+      setSeries((s) =>
+        series.filter((item) => item.name !== checkedState[position].prefName)
+      )
     }
+    console.log(series)
   }, [post])
+
   const data = () => {
     const filterArr = post.result.data.find((elm) => elm.label === '総人口')
     if (!filterArr) return []
@@ -98,22 +99,20 @@ export const Prefectures: React.FC<Props> = (props) => {
     return tempArr.map((elm) => elm.value)
   }
 
-  const dataset2 = (name: string): Series => ({
+  const dataset = (name: string): Series => ({
     type: 'line',
     name,
     data: data(),
   })
 
-  const getApi = (id: number) => {
+  const getApi = (prefCode: number) => {
     if (process.env.REACT_APP_RESAS_API_KEY) {
       axios
-        .get(
-          'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=11362&prefCode=11',
-          {
-            headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
-          }
-        )
+        .get(`${getPopulationURL}?cityCode=-&prefCode=${prefCode}`, {
+          headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
+        })
         .then((result: AxiosResponse<Population>) => {
+          console.log(2, result.data)
           setPost(result.data)
         })
         .catch((error: AxiosError<{ error: string }>) => {
@@ -122,9 +121,9 @@ export const Prefectures: React.FC<Props> = (props) => {
     }
   }
 
-  const handleCheckedState = (position: number) => {
+  const handleCheckedState = (position: number, prefCode: number) => {
     setPosition(position)
-    getApi(position)
+    getApi(prefCode)
 
     //checkボックス更新処理
     const updateItem = (index: number) => {
@@ -146,7 +145,7 @@ export const Prefectures: React.FC<Props> = (props) => {
         name="name"
         value={item.prefCode}
         checked={checkedState[index].checked}
-        onChange={() => handleCheckedState(index)}
+        onChange={() => handleCheckedState(index, item.prefCode)}
       />
       <label htmlFor={item.prefName}>{item.prefName}</label>
     </li>
