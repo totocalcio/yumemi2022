@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-type ResasResponse<T> = {
+type Response<T> = {
   statusCode: string
   description: string
   message: string | null
@@ -23,7 +23,7 @@ type Result = {
   }[]
 }
 
-type Population = ResasResponse<Result>
+type Population = Response<Result>
 
 type Props = {
   prefectures: {
@@ -76,15 +76,13 @@ export const Prefectures: React.FC<Props> = (props) => {
   }
 
   React.useEffect(() => {
-    console.log(1, post)
     if (checkedState[position].checked === true) {
-      setSeries((s) => [...series, dataset(checkedState[position].prefName)])
+      setSeries(() => [...series, dataset(checkedState[position].prefName)])
     } else {
-      setSeries((s) =>
+      setSeries(() =>
         series.filter((item) => item.name !== checkedState[position].prefName)
       )
     }
-    console.log(series)
   }, [post])
 
   const data = () => {
@@ -112,7 +110,6 @@ export const Prefectures: React.FC<Props> = (props) => {
           headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
         })
         .then((result: AxiosResponse<Population>) => {
-          console.log(2, result.data)
           setPost(result.data)
         })
         .catch((error: AxiosError<{ error: string }>) => {
@@ -141,13 +138,13 @@ export const Prefectures: React.FC<Props> = (props) => {
     <li key={index}>
       <input
         type="checkbox"
-        id={item.prefName}
+        id={item.prefCode.toString()}
         name="name"
         value={item.prefCode}
         checked={checkedState[index].checked}
         onChange={() => handleCheckedState(index, item.prefCode)}
       />
-      <label htmlFor={item.prefName}>{item.prefName}</label>
+      <label htmlFor={item.prefCode.toString()}>{item.prefName}</label>
     </li>
   ))
 
