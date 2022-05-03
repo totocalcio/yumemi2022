@@ -15,8 +15,16 @@ export namespace Resas {
     description: string
   }
 
-  //[todo]うまく使いたい
-  export type ResasResponseUnion = ResasResponse | ErrorResponse
+  //[todo]うまく合併型を使いたい
+  export type ResponseData = {
+    message: null
+    result: {
+      prefCode: number
+      prefName: string
+    }[]
+  }
+  export type ResasResponseUnion = ResponseData | ErrorResponse
+  //　　ここまで
 
   export type Response<T> = {
     statusCode: string
