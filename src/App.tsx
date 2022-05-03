@@ -5,7 +5,7 @@ import { Prefectures } from './components/Prefectures'
 import { usePrefecturesList } from './hooks/usePrefecturesList'
 
 const App: React.FC = () => {
-  const [post] = usePrefecturesList()
+  const post = usePrefecturesList()
 
   if (post) {
     return (

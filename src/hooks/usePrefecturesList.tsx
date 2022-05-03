@@ -34,18 +34,21 @@ export const usePrefecturesList = () => {
   const [post, setPost] = React.useState<ResasResponse>(null!)
   React.useEffect(() => {
     const getApi = async () => {
-      //[todo]第２引数に何を設定すればいいのかわからない
-      let response: AxiosResponse<ResasResponse, any>
-      if (process.env.REACT_APP_RESAS_API_KEY) {
-        response = await axios.get(baseURL, {
-          headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
-        })
-        setPost(response.data)
-      }
+      if (process.env.REACT_APP_RESAS_API_KEY === undefined) return
+      const response: AxiosResponse<ResasResponse> = await axios.get(baseURL, {
+        headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
+      })
+      return response
     }
-    getApi().catch((error) => {
-      console.error(error)
-    })
+    getApi()
+      .then((response) => {
+        if (response !== undefined) {
+          setPost(() => response.data)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
-  return [post]
+  return post
 }
