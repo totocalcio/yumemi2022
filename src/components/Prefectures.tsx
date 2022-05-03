@@ -5,7 +5,8 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useSeriesItem } from '../hooks/useSeriesItem'
 import { CATEGORIES } from '../utils/constant'
-import { Resas } from '../@types/resas.d'
+import { ResasType } from '../@types/resas.d'
+import { HighchartsType } from '../@types/highcharts.d'
 
 type Props = {
   prefectures: {
@@ -15,25 +16,19 @@ type Props = {
   }[]
 }
 
-type Series = {
-  type: 'line'
-  name: string
-  data: number[]
-}
-
 const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
   list-style: none;
 `
 
-const getPopulationURL =
+const populationURL =
   'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear'
 
 export const Prefectures: React.FC<Props> = (props) => {
-  const [post, setPost] = React.useState<Resas.Population>(null!)
+  const [post, setPost] = React.useState<ResasType.Population>(null!)
   const [checkedState, setCheckedState] = React.useState(props.prefectures)
-  const [series, setSeries] = React.useState<Series[]>([])
+  const [series, setSeries] = React.useState<HighchartsType.Series[]>([])
   const [position, setPosition] = React.useState(0)
   const chartComponentRef = React.useRef<HighchartsReact.RefObject>(null)
   const seriesItem = useSeriesItem(post)
@@ -69,10 +64,10 @@ export const Prefectures: React.FC<Props> = (props) => {
   const getApi = (prefCode: number) => {
     if (process.env.REACT_APP_RESAS_API_KEY) {
       axios
-        .get(`${getPopulationURL}?cityCode=-&prefCode=${prefCode}`, {
+        .get(`${populationURL}?cityCode=-&prefCode=${prefCode}`, {
           headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
         })
-        .then((result: AxiosResponse<Resas.Population>) => {
+        .then((result: AxiosResponse<ResasType.Population>) => {
           setPost(result.data)
         })
         .catch((error: AxiosError<{ error: string }>) => {

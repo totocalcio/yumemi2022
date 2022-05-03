@@ -1,4 +1,4 @@
-export namespace Resas {
+export namespace ResasType {
   export type ErrorResponse = {
     statusCode: string
     description: string
