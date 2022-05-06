@@ -4,6 +4,7 @@ import { HighchartsType } from '../@types/highcharts.d'
 
 export const useSeriesItem = (post: ResasType.Population) => {
   const data = () => {
+    if (post === null) return []
     const filterArr = post.result.data.find((elm) => elm.label === '総人口')
     if (!filterArr) return []
     const tempArr = filterArr.data.filter(
