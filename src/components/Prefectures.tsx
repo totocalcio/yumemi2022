@@ -29,7 +29,7 @@ export const Prefectures: React.FC<Props> = (props) => {
   const [post, setPost] = React.useState<ResasType.Population>(null!)
   const [checkedState, setCheckedState] = React.useState(props.prefectures)
   const [series, setSeries] = React.useState<HighchartsType.Series[]>([])
-  const [position, setPosition] = React.useState(0)
+  const [positionState, setPositionState] = React.useState(0)
   const chartComponentRef = React.useRef<HighchartsReact.RefObject>(null)
   const seriesItem = useSeriesItem(post)
 
@@ -52,11 +52,19 @@ export const Prefectures: React.FC<Props> = (props) => {
   }
 
   React.useEffect(() => {
-    if (checkedState[position].checked === true) {
-      setSeries(() => [...series, seriesItem(checkedState[position].prefName)])
+    if (checkedState[positionState].checked === true) {
+      setSeries(() => [
+        ...series,
+        seriesItem(checkedState[positionState].prefName),
+      ])
     } else {
+      //[todo]series.filterが想定した動きではない
+      //どこかでseriesの中身が書き換わっているがsetSeriesを行っている場所がなく不明
+      // console.log(series)
       setSeries(() =>
-        series.filter((item) => item.name !== checkedState[position].prefName)
+        series.filter(
+          (item) => item.name !== checkedState[positionState].prefName
+        )
       )
     }
   }, [post])
@@ -77,7 +85,7 @@ export const Prefectures: React.FC<Props> = (props) => {
   }
 
   const handleCheckedState = (position: number, prefCode: number) => {
-    setPosition(position)
+    setPositionState(position)
     getApi(prefCode)
 
     //checkボックス更新処理
