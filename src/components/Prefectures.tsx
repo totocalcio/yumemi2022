@@ -17,9 +17,21 @@ type Props = {
 }
 
 const List = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 0.4em;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   list-style: none;
+  margin: 0;
+  padding: 1em 2em;
+`
+
+const Item = styled.li`
+  text-align: left;
+`
+
+const ChartContainer = styled.div`
+  margin-top: 1em;
+  padding: 1em;
 `
 
 const populationURL =
@@ -101,7 +113,7 @@ export const Prefectures: React.FC<Props> = (props) => {
   }
 
   const mapList = props.prefectures.map((item, index) => (
-    <li key={index}>
+    <Item key={index}>
       <input
         type="checkbox"
         id={item.prefCode.toString()}
@@ -111,18 +123,20 @@ export const Prefectures: React.FC<Props> = (props) => {
         onChange={() => handleCheckedState(index, item.prefCode)}
       />
       <label htmlFor={item.prefCode.toString()}>{item.prefName}</label>
-    </li>
+    </Item>
   ))
 
   return (
     <>
       <List>{mapList}</List>
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={options}
-        ref={chartComponentRef}
-        {...props}
-      />
+      <ChartContainer>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+          ref={chartComponentRef}
+          {...props}
+        />
+      </ChartContainer>
     </>
   )
 }
