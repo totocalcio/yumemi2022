@@ -7,15 +7,14 @@ type CheckedState = {
 }[]
 
 export const useCheckbox = (
-  updateItem: () => void,
-  checkedState: CheckedState,
-  position: number,
-  isChecked: boolean | undefined
+  setCheckedState: React.Dispatch<React.SetStateAction<CheckedState>>,
+  updateCheckedState: CheckedState,
+  position: number
 ) => {
   React.useEffect(() => {
-    updateItem()
+    setCheckedState(() => updateCheckedState)
     //[todo]全体的にuseEffectの第二引数って何を設定すればよいか理解が浅い
-  }, [isChecked])
+  }, [setCheckedState])
   // updateItem()
-  return checkedState[position]
+  return updateCheckedState[position]
 }
