@@ -1,9 +1,9 @@
-import axios, { AxiosResponse, AxiosError } from 'axios'
 import * as React from 'react'
 import styled from 'styled-components'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useSeriesItem } from '../hooks/useSeriesItem'
+import { usePrefecturesData } from '../hooks/usePrefecturesData'
 import { CATEGORIES } from '../utils/constant'
 import { ResasType } from '../@types/resas.d'
 import { HighchartsType } from '../@types/highcharts.d'
@@ -22,9 +22,6 @@ const List = styled.ul`
   list-style: none;
 `
 
-const populationURL =
-  'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear'
-
 export const Prefectures: React.FC<Props> = (props) => {
   const [post, setPost] = React.useState<ResasType.Population>(null!)
   const [checkedState, setCheckedState] = React.useState(props.prefectures)
@@ -32,6 +29,7 @@ export const Prefectures: React.FC<Props> = (props) => {
   const [positionState, setPositionState] = React.useState(0)
   const chartComponentRef = React.useRef<HighchartsReact.RefObject>(null)
   const seriesItem = useSeriesItem(post)
+  const getApiData = usePrefecturesData(setPost)
 
   const options: Highcharts.Options = {
     title: {
@@ -69,24 +67,9 @@ export const Prefectures: React.FC<Props> = (props) => {
     }
   }, [post])
 
-  const getApi = (prefCode: number) => {
-    if (process.env.REACT_APP_RESAS_API_KEY) {
-      axios
-        .get(`${populationURL}?cityCode=-&prefCode=${prefCode}`, {
-          headers: { 'X-API-KEY': process.env.REACT_APP_RESAS_API_KEY },
-        })
-        .then((result: AxiosResponse<ResasType.Population>) => {
-          setPost(result.data)
-        })
-        .catch((error: AxiosError<{ error: string }>) => {
-          console.error(error)
-        })
-    }
-  }
-
   const handleCheckedState = (position: number, prefCode: number) => {
     setPositionState(position)
-    getApi(prefCode)
+    getApiData(prefCode)
 
     //checkボックス更新処理
     const updateItem = (index: number) => {
