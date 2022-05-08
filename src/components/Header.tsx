@@ -1,10 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
+//type
 type Props = {
   title: string
 }
 
+//style
 const Title = styled.h1`
   background: #eee;
   margin: 0;

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
+//style
 const Text = styled.h2`
   text-align: left;
   margin: 0;

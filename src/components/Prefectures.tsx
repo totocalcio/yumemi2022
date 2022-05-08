@@ -8,6 +8,7 @@ import { CATEGORIES } from '../utils/constant'
 import { ResasType } from '../@types/resas.d'
 import { HighchartsType } from '../@types/highcharts.d'
 
+//type
 type Props = {
   prefectures: {
     prefCode: number
@@ -16,6 +17,7 @@ type Props = {
   }[]
 }
 
+//style
 const List = styled.ul`
   display: grid;
   gap: 0.4em;
