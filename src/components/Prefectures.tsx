@@ -87,8 +87,9 @@ export const Prefectures: React.FC<Props> = (props) => {
 
     //checkボックス更新処理
     const updateItem = (index: number) => {
-      checkedState[index].checked = !checkedState[index].checked
-      return checkedState[index]
+      const copyCheckedState = [...checkedState]
+      copyCheckedState[index].checked = !checkedState[index].checked
+      return copyCheckedState[index]
     }
     setCheckedState(
       checkedState.map((item, index) =>
