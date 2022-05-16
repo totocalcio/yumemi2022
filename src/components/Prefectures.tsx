@@ -65,16 +65,16 @@ export const Prefectures: React.FC<Props> = (props) => {
 
   React.useEffect(() => {
     if (checkedState[positionState].checked === true) {
-      setSeries(() => [
-        ...series,
+      setSeries((state) => [
+        ...state,
         seriesItem(checkedState[positionState].prefName),
       ])
     } else {
       //[todo]series.filterが想定した動きではない
       //どこかでseriesの中身が書き換わっているがsetSeriesを行っている場所がなく不明
       // console.log(series)
-      setSeries(() =>
-        series.filter(
+      setSeries((state) =>
+        state.filter(
           (item) => item.name !== checkedState[positionState].prefName
         )
       )
