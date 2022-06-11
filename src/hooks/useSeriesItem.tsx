@@ -1,0 +1,24 @@
+import { CATEGORIES } from '../utils/constant'
+import { ResasType } from '../@types/resas.d'
+import { HighchartsType } from '../@types/highcharts.d'
+
+export const useSeriesItem = (post: ResasType.Population) => {
+  const data = () => {
+    const filterArr = post.result.data.find((elm) => elm.label === '総人口')
+    if (!filterArr) return []
+    const tempArr = filterArr.data.filter(
+      (elm) =>
+        Number(CATEGORIES[0]) <= elm.year &&
+        elm.year <= Number(CATEGORIES[CATEGORIES.length - 1]) &&
+        elm.year.toString().slice(-1) === '0'
+    )
+    return tempArr.map((elm) => elm.value)
+  }
+
+  const seriesItem = (name: string): HighchartsType.Series => ({
+    type: 'line',
+    name,
+    data: data(),
+  })
+  return seriesItem
+}

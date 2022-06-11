@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react'
+import './App.css'
+import { Header } from './components/Header'
+import { Prefectures } from './components/Prefectures'
+import { usePrefecturesList } from './hooks/usePrefecturesList'
+import { Title } from './components/Subtitle'
+import styled from 'styled-components'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const Container = styled.div`
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+`
+
+const App: React.FC = () => {
+  const post = usePrefecturesList()
+
+  if (post) {
+    return (
+      <div className="App">
+        <Header title="Title" />
+        <Container>
+          <Title title="都道府県" />
+          <Prefectures prefectures={post.result} />
+        </Container>
+      </div>
+    )
+  }
+
+  return <div>Loading...</div>
 }
 
-export default App;
+export default App
